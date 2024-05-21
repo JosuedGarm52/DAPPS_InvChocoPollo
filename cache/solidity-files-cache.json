@@ -187,8 +187,8 @@
       ]
     },
     "C:\\Goeth\\InvChocoPollo\\contracts\\Pollo.sol": {
-      "lastModificationDate": 1716265879573,
-      "contentHash": "fc8625d30bee7939e3065a3810bcc58d",
+      "lastModificationDate": 1716328435673,
+      "contentHash": "6020ffd60b255a3a6d724cc29166e4c3",
       "sourceName": "contracts/Pollo.sol",
       "solcConfig": {
         "version": "0.8.24",

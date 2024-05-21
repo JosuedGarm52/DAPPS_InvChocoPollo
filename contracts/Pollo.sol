@@ -12,16 +12,15 @@ contract Pollos is Ownable{
         string size;
         string sexo;
         uint256 precio;
-        uint256 cantidadExistencia;
         uint256 PolloId;
     }
     mapping(uint256 => Pollo) public pollos;
 
     // (POST)
-    function addPollo(string memory color, string memory size, string memory sexo, uint256 precio, uint256 cantidadExistencia) public onlyOwner returns (uint256) {
+    function addPollo(string memory color, string memory size, string memory sexo, uint256 precio) public onlyOwner returns (uint256) {
         _polloIds.increment();
         uint256 newPolloId = _polloIds.current();
-        Pollo memory newPollo = Pollo(color, size, sexo, precio, cantidadExistencia, newPolloId);
+        Pollo memory newPollo = Pollo(color, size, sexo, precio, newPolloId);
         pollos[newPolloId] = newPollo;
         return newPolloId;
     }
@@ -32,14 +31,13 @@ contract Pollos is Ownable{
     }
 
     //(PUT)
-    function updatePollo(uint256 polloId, string memory color, string memory size, string memory sexo, uint256 precio, uint256 cantidadExistencia) public onlyOwner {
+    function updatePollo(uint256 polloId, string memory color, string memory size, string memory sexo, uint256 precio) public onlyOwner {
         require(polloId <= _polloIds.current(), "Pollo ID does not exist");
         Pollo storage pollo = pollos[polloId];
         pollo.color = color;
         pollo.size = size;
         pollo.sexo = sexo;
         pollo.precio = precio;
-        pollo.cantidadExistencia = cantidadExistencia;
     }
 
     // (DELETE)

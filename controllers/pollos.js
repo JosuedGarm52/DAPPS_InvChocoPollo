@@ -29,10 +29,10 @@ async function createTransaction(provider, method, param){
     return transaction
 }
 
-async function CreatePollo(color, size, sexo, precio, cantidadExistencia) {
+async function CreatePollo(color, size, sexo, precio) {
     const provider = new ethers.providers.JsonRpcProvider(API_URL);
     const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
-    const transaction = await createTransaction(provider, "addPollo", [color, size, sexo, precio, cantidadExistencia]);
+    const transaction = await createTransaction(provider, "addPollo", [color, size, sexo, precio]);
     const estimateGas = await provider.estimateGas(transaction);
     transaction["gasLimit"] = estimateGas;
     const singedTx = await wallet.signTransaction(transaction);
@@ -70,10 +70,10 @@ async function getPollo(polloId){
     return formatPollo(result)
 }
 
-async function updatePollo(polloId, color, size, sexo, precio, cantidadExistencia) {
+async function updatePollo(polloId, color, size, sexo, precio) {
     const provider = new ethers.providers.JsonRpcProvider(API_URL);
     const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
-    const transaction = await createTransaction(provider, "updatePollo", [polloId, color, size, sexo, precio, cantidadExistencia]);
+    const transaction = await createTransaction(provider, "updatePollo", [polloId, color, size, sexo, precio]);
     const estimateGas = await provider.estimateGas(transaction);
     transaction["gasLimit"] = estimateGas;
     const signedTx = await wallet.signTransaction(transaction);
@@ -106,7 +106,6 @@ function formatPollo(info) {
         size: info.size,
         sexo: info.sexo,
         precio: ethers.BigNumber.from(info.precio).toNumber(),
-        cantidadExistencia: ethers.BigNumber.from(info.cantidadExistencia).toNumber(),
         PolloId: ethers.BigNumber.from(info.PolloId).toNumber()
     };
     return chocolate;
