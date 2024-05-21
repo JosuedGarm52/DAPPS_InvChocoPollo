@@ -59,7 +59,7 @@ async function getPollos(){
     return pollo; 
 }
 
-async function getChocolate(polloId){
+async function getPollo(polloId){
     const provider = new ethers.providers.JsonRpcProvider(API_URL)
     const polloContract = new ethers.Contract(
         CHOCOLATE_ADDRESS,
@@ -70,10 +70,10 @@ async function getChocolate(polloId){
     return formatPollo(result)
 }
 
-async function updateChocolate(polloId, nombre, tipo, descripcion, precio, cantidadExistencia) {
+async function updatePollo(polloId, color, size, sexo, precio, cantidadExistencia) {
     const provider = new ethers.providers.JsonRpcProvider(API_URL);
     const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
-    const transaction = await createTransaction(provider, "updateChocolate", [polloId, nombre, tipo, descripcion, precio, cantidadExistencia]);
+    const transaction = await createTransaction(provider, "updatePollo", [polloId, color, size, sexo, precio, cantidadExistencia]);
     const estimateGas = await provider.estimateGas(transaction);
     transaction["gasLimit"] = estimateGas;
     const signedTx = await wallet.signTransaction(transaction);
@@ -86,10 +86,10 @@ async function updateChocolate(polloId, nombre, tipo, descripcion, precio, canti
 }
 
 
-async function deleteChocolate(polloId) {
+async function deletePollo(polloId) {
     const provider = new ethers.providers.JsonRpcProvider(API_URL);
     const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
-    const transaction = await createTransaction(provider, "deleteChocolate", [polloId]);
+    const transaction = await createTransaction(provider, "deletePollo", [polloId]);
     const estimateGas = await provider.estimateGas(transaction);
     transaction["gasLimit"] = estimateGas;
     const signedTx = await wallet.signTransaction(transaction);
@@ -114,9 +114,9 @@ function formatPollo(info) {
 
 
 module.exports = {
-    getChocolates: getChocolates,
-    getChocolate: getChocolate,
-    CreateChocolate: CreateChocolate,
-    updateChocolate: updateChocolate,
-    deleteChocolate: deleteChocolate
+    CreatePollo: CreatePollo,
+    getPollos: getPollos,
+    getPollo: getPollo,
+    updatePollo: updatePollo,
+    deletePollo: deletePollo
 };

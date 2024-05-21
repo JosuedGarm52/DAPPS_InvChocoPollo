@@ -5,6 +5,7 @@ const path = require('path')
 const fs = require('fs')
 const { error } = require('console');
 const chocoRoutes = require('./routes/chocolate.js')
+const polloRoutes = require('./routes/pollo.js')
 const bodyParser = require("body-parser")
 
 app.use(bodyParser.urlencoded({
@@ -12,6 +13,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json())
 app.use('/api',chocoRoutes)
+app.use('/api',polloRoutes)
 
 app.use(express.static(path.join(__dirname,'public')))
 
