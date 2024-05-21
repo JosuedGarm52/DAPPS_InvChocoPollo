@@ -1,5 +1,5 @@
 # InvChocoPollo
-Explicación de la aplicación  
+## Explicación de la aplicación  
 
  
 
