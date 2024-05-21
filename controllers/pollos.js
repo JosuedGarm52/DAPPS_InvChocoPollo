@@ -62,7 +62,7 @@ async function getPollos(){
 async function getPollo(polloId){
     const provider = new ethers.providers.JsonRpcProvider(API_URL)
     const polloContract = new ethers.Contract(
-        CHOCOLATE_ADDRESS,
+        POLLO_ADDRESS,
         contract.abi,
         provider
     )
