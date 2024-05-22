@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADD Chocolate</title>
+    <link rel="stylesheet" href="botones.css">
+</head>
+<body>
+    <h1>Añadir Chocolate</h1>
+    <form id="chocolateForm">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre"><br><br>
+        
+        <label for="tipo">Tipo:</label>
+        <input type="text" id="tipo" name="tipo"><br><br>
+        
+        <label for="descripcion">Descripción:</label>
+        <input type="text" id="descripcion" name="descripcion"><br><br>
+        
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio" name="precio"><br><br>
+        
+        <label for="cantidadExistencia">Cantidad en Existencia:</label>
+        <input type="number" id="cantidadExistencia" name="cantidadExistencia"><br><br>
+        
+        <button type="submit">Añadir Chocolate</button>
+    </form>
+    <a href="chocolate-inventory" class="button">Regresar</a>
+    <script>
+        document.getElementById('chocolateForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Evita que el formulario se envíe normalmente
+            /*
+            const formData = new FormData(this); // Recopila los datos del formulario
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            console.log('JSON a enviar:', jsonData); // Imprime el JSON que se enviará
+            */
+            // Obtener los valores de los campos del formulario
+            const nombre = document.getElementById('nombre').value;
+            const tipo = document.getElementById('tipo').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const precio = document.getElementById('precio').value;
+            const cantidadExistencia = document.getElementById('cantidadExistencia').value;
+
+            const dataToSend = {
+                nombre: nombre,
+                tipo: tipo,
+                descripcion: descripcion,
+                precio: parseInt(precio), // Convertir a número si es necesario
+                cantidadExistencia: parseInt(cantidadExistencia) // Convertir a número si es necesario
+            };
+
+            // Convertir el objeto dataToSend a JSON
+            const jsonData = JSON.stringify(dataToSend);
+            console.log("json " + jsonData)
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/chocolate/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonData 
+                });
+                
+                
+                if (response.ok) {
+                    const data = await response.json(); // Espera la respuesta del servidor
+                    console.log('Chocolate añadido:', "data");
+                    alert('Chocolate añadido con éxito');
+                } else {
+                    const errorMessage = await response.text(); // Captura el mensaje de error
+                    console.error('Error:', errorMessage);
+                    alert('Error al añadir el chocolate');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al añadir el chocolate');
+            }
+        });
+    </script>
+</body>
+</html>

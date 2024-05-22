@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chocolates</title>
+    <link rel="stylesheet" href="botones.css">
+</head>
+<body>
+    <h1>Lista de Chocolates</h1>
+    <table id="chocolatesTable" border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Cantidad en Existencia</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Las filas se llenarán con JavaScript -->
+        </tbody>
+    </table>
+
+    <a href="addChocolate" class="button">Añadir Chocolate</a>
+    <a href="Home" class="button">Home</a>
+    <a href="pollo-inventory" class="button">Pollo</a>
+    <a href="envCliente-inventory" class="button">Envio de clientes</a>
+
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <script>
+        async function getChocolates() {
+            const response = await fetch('http://localhost:3000/api/chocolates/');
+            const chocolates = await response.json();
+            return chocolates;
+        }
+
+        async function populateTable() {
+            const chocolates = await getChocolates();
+            const tableBody = document.getElementById('chocolatesTable').getElementsByTagName('tbody')[0];
+
+            chocolates.forEach(choco => {
+                if (choco.chocoId === 0) return;
+                const row = document.createElement('tr');
+
+                // Nombre
+                const nombreCell = document.createElement('td');
+                nombreCell.textContent = choco.nombre;
+                row.appendChild(nombreCell);
+
+                // Tipo
+                const tipoCell = document.createElement('td');
+                tipoCell.textContent = choco.tipo;
+                row.appendChild(tipoCell);
+
+                // Descripción
+                const descripcionCell = document.createElement('td');
+                descripcionCell.textContent = choco.descripcion;
+                row.appendChild(descripcionCell);
+
+                // Precio
+                const precioCell = document.createElement('td');
+                precioCell.textContent = choco.precio;
+                row.appendChild(precioCell);
+
+                // Cantidad en Existencia
+                const cantidadExistenciaCell = document.createElement('td');
+                cantidadExistenciaCell.textContent = choco.cantidadExistencia;
+                row.appendChild(cantidadExistenciaCell);
+
+                // Acciones
+                const accionesCell = document.createElement('td');
+
+                // Botón Ver
+                const verButton = document.createElement('button');
+                verButton.textContent = 'Ver';
+                verButton.onclick = () => verChocolate(choco.chocoId);
+                accionesCell.appendChild(verButton);
+
+                // Botón Editar
+                const editarButton = document.createElement('button');
+                editarButton.textContent = 'Editar';
+                editarButton.onclick = () => editarChocolate(choco.chocoId);
+                accionesCell.appendChild(editarButton);
+
+                // Botón Borrar
+                const borrarButton = document.createElement('button');
+                borrarButton.textContent = 'Borrar';
+                borrarButton.onclick = () => borrarChocolate(choco.chocoId);
+                accionesCell.appendChild(borrarButton);
+
+                row.appendChild(accionesCell);
+                tableBody.appendChild(row);
+            });
+        }
+
+        function verChocolate(chocoId) {
+            window.location.href = `/detalleChocolate?chocoId=${chocoId}`;
+        }
+
+        function editarChocolate(chocoId) {
+            alert(`Editar chocolate con ID: ${chocoId}`);
+            // Implementa la lógica para editar el chocolate
+        }
+
+        function borrarChocolate(chocoId) {
+            const isConfirmed = window.confirm(`¿Estás seguro de que quieres borrar el chocolate con ID: ${chocoId}?`);
+            if (isConfirmed) {
+                fetch(`http://localhost:3000/api/chocolate/${chocoId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Chocolate borrado con éxito');
+                        // Opcional: Recargar la página o actualizar la tabla
+                        location.reload(); // Recarga la página para reflejar los cambios
+                    } else {
+                        alert('Error al borrar el chocolate');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al borrar el chocolate');
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', populateTable);
+    </script>
+</body>
+</html>
