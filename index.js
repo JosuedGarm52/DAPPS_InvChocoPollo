@@ -40,6 +40,10 @@ app.get('/envCliente-inventory',(req, res) =>{
 app.get('/detalleChocolate', (req, res) => {
     res.sendFile(path.join(__dirname, 'page/detalleChocolate.html'));
 });
+app.get('/detallePollo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'page/detallePollo.html'));
+});
+
 app.get('/addChocolate', (req, res) => {
     res.sendFile(path.join(__dirname, 'page/addChocolate.html'));
 });

@@ -115,7 +115,7 @@
             if (deleteButton) {
                 deleteButton.classList.add('loading');
             } else {
-                console.error('Button element with ID "add" not found.');
+                console.error('Button element with ID "borrar-xx" not found.');
             }
             
             if (isConfirmed) {
@@ -130,12 +130,15 @@
                     } else {
                         alert('Error al borrar el chocolate');
                     }
+                    deleteButton.classList.remove('loading');
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Error al borrar el chocolate');
+                    deleteButton.classList.remove('loading');
                 });
             }
+            
         }
 
         document.addEventListener('DOMContentLoaded', populateTable);

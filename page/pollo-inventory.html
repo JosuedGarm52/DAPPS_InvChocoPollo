@@ -45,6 +45,7 @@
             const tableBody = document.getElementById('pollosTable').getElementsByTagName('tbody')[0];
 
             pollos.forEach(pollo => {
+                if (pollo.PolloId === 0) return;
                 const row = document.createElement('tr');
 
                 // Nombre
@@ -78,19 +79,21 @@
                 // Botón Ver
                 const verButton = document.createElement('button');
                 verButton.textContent = 'Ver';
-                verButton.onclick = () => verPollo(pollo.polloId);
+                verButton.onclick = () => verPollo(pollo.PolloId);
                 accionesCell.appendChild(verButton);
 
                 // Botón Editar
                 const editarButton = document.createElement('button');
                 editarButton.textContent = 'Editar';
-                editarButton.onclick = () => editarPollo(pollo.polloId);
+                editarButton.onclick = () => editarPollo(pollo.PolloId);
                 accionesCell.appendChild(editarButton);
 
                 // Botón Borrar
                 const borrarButton = document.createElement('button');
+                borrarButton.id = `borrar-${pollo.PolloId}`;
                 borrarButton.textContent = 'Borrar';
-                borrarButton.onclick = () => borrarPollo(pollo.polloId);
+                borrarButton.classList.add('button');
+                borrarButton.onclick = () => borrarPollo(pollo.PolloId);
                 accionesCell.appendChild(borrarButton);
 
                 row.appendChild(accionesCell);
@@ -98,18 +101,24 @@
             });
         }
 
-        function verPollo(polloId) {
-            window.location.href = `/detallePollo?polloId=${polloId}`;
+        function verPollo(PolloId) {
+            window.location.href = `/detallePollo?PolloId=${PolloId}`;
         }
 
-        function editarPollo(polloId) {
-            alert(`Editar pollo con ID: ${polloId}`);
+        function editarPollo(PolloId) {
+            window.location.href = `/putPollo?PolloId=${PolloId}`;
         }
 
-        function borrarPollo(polloId) {
-            const isConfirmed = window.confirm(`¿Estás seguro de que quieres borrar el pollo con ID: ${polloId}?`);
+        function borrarPollo(PolloId) {
+            const isConfirmed = window.confirm(`¿Estás seguro de que quieres borrar el pollo con ID: ${PolloId}?`);
+            const deleteButton = document.querySelector(`#borrar-${PolloId}`);
+            if (deleteButton) {
+                deleteButton.classList.add('loading');
+            } else {
+                console.error('Button element with ID "borrar-xx" not found.');
+            }
             if (isConfirmed) {
-                fetch(`http://localhost:3000/api/pollo/${polloId}`, {
+                fetch(`http://localhost:3000/api/pollo/${PolloId}`, {
                     method: 'DELETE'
                 })
                 .then(response => {
@@ -119,12 +128,15 @@
                     } else {
                         alert('Error al borrar el pollo');
                     }
+                    deleteButton.classList.remove('loading');
                 })
                 .catch(error => {
+                    deleteButton.classList.remove('loading');
                     console.error('Error:', error);
                     alert('Error al borrar el pollo');
                 });
             }
+            
         }
 
         document.addEventListener('DOMContentLoaded', populateTable);

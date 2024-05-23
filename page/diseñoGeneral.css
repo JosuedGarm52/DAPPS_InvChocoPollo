@@ -1,11 +1,3 @@
-
-  /* Encabezado */
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: rgb(5, 247, 5); /* Color de texto más oscuro */
-}
-
   /* Contenedor principal */
 .contenedor-chocolate {
     width: 50%; /* Ancho del contenedor */

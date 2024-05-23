@@ -4,36 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Añadir Pollo</title>
-    <link rel="stylesheet" href="addPollo.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-image: url('pollos1.jpg'); /* Reemplazar con la ruta de la imagen */
+            background-size: cover; /* Cubrir toda la página con la imagen */
+            background-position: center; /* Centrar la imagen en la página */
+            background-repeat: no-repeat; /* No repetir la imagen */
+            background-attachment: fixed; /* Imagen fija al desplazarse */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: black; /* Color de texto más oscuro */
+        }
+    </style>
+    <link rel="stylesheet" href="diseñoGeneral.css">
 </head>
 <body>
-    <div class="container">
+    <div class="contenedor-chocolate">
         <h1 class="title">Añadir Pollo</h1>
         <form id="polloForm">
-            <div class="form-group">
-                <label for="color">Color:</label>
-                <input type="text" id="color" name="color" required>
-            </div>
-            <div class="form-group">
-                <label for="size">Tamaño:</label>
-                <input type="text" id="size" name="size" required>
-            </div>
-            <div class="form-group">
-                <label for="sexo">Sexo:</label>
-                <input type="text" id="sexo" name="sexo" required>
-            </div>
-            <div class="form-group">
-                <label for="precio">Precio:</label>
-                <input type="number" id="precio" name="precio" required>
-            </div>
-            <button type="submit" class="button">Añadir Pollo</button>
+            <label for="color">Color:</label>
+            <input type="text" id="color" name="color"><br><br>
+            
+            <label for="size">Size:</label>
+            <input type="text" id="size" name="size"><br><br>
+            
+            <label for="sexo">Sexo:</label>
+            <input type="text" id="sexo" name="sexo"><br><br>
+            
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio"><br><br>
+            
+            <button type="submit" class="button" id = "add">Añadir Pollo</button>
         </form>
         <a href="pollo-inventory" class="button">Regresar</a>
     </div>
     <script>
         document.getElementById('polloForm').addEventListener('submit', async function(event) {
             event.preventDefault();
-
+            const addPolloButton = document.querySelector('#add');
+            if (addPolloButton) {
+                addPolloButton.classList.add('loading');
+            } else {
+                console.error('Button element with ID "add" not found.');
+            }
             const color = document.getElementById('color').value;
             const size = document.getElementById('size').value;
             const sexo = document.getElementById('sexo').value;
@@ -64,7 +81,9 @@
                     const data = await response.json();
                     console.log('Pollo añadido:', data);
                     alert('Pollo añadido con éxito');
+                    window.location.href = "pollo-inventory";
                 } else {
+                    addPolloButton.classList.remove('loading');
                     const errorMessage = await response.text();
                     console.error('Error:', errorMessage);
                     alert('Error al añadir el pollo');
@@ -72,6 +91,7 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error al añadir el pollo');
+                addPolloButton.classList.remove('loading');
             }
         });
     </script>
