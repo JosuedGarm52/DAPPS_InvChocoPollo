@@ -45,16 +45,17 @@
             const tableBody = document.getElementById('enviosTable').getElementsByTagName('tbody')[0];
 
             envios.forEach(envio => {
+                if (envio.envioClienteId === 0) return;
                 const row = document.createElement('tr');
 
                 // Nombre de la tienda
                 const tiendaCell = document.createElement('td');
-                tiendaCell.textContent = envio.Tienda;
+                tiendaCell.textContent = envio.nombreTienda;
                 row.appendChild(tiendaCell);
 
                 // Nombre del encargado
                 const encargadoCell = document.createElement('td');
-                encargadoCell.textContent = envio.Encargado;
+                encargadoCell.textContent = envio.nombreEncargado;
                 row.appendChild(encargadoCell);
 
                 // dirección
@@ -65,22 +66,13 @@
                 // Acciones
                 const accionesCell = document.createElement('td');
 
-                // Botón Ver
-                const verButton = document.createElement('button');
-                verButton.textContent = 'Ver';
-                verButton.onclick = () => verCliente(envio.envioClienteId);
-                accionesCell.appendChild(verButton);
-
-                // Botón Editar
-                const editarButton = document.createElement('button');
-                editarButton.textContent = 'Editar';
-                editarButton.onclick = () => editarCliente(envio.envioClienteId);
-                accionesCell.appendChild(editarButton);
 
                 // Botón Borrar
                 const borrarButton = document.createElement('button');
+                borrarButton.id = `borrar-${envio.envioClienteId}`;
                 borrarButton.textContent = 'Borrar';
-                borrarButton.onclick = () => borrarCliente(envio.envioClienteId);
+                borrarButton.classList.add('button');
+                borrarButton.onclick = () => borrarChocolate(envio.envioClienteId);
                 accionesCell.appendChild(borrarButton);
 
                 row.appendChild(accionesCell);
@@ -98,21 +90,31 @@
 
         function borrarCliente(envioClienteId) {
             const isConfirmed = window.confirm(`¿Estás seguro de que quieres borrar el chocolate con ID: ${chocoId}?`);
+            const deleteButton = document.querySelector(`#borrar-${envioClienteId}`);
+            if (deleteButton) {
+                deleteButton.classList.add('loading');
+            } else {
+                console.error('Button element with ID "borrar-xx" not found.');
+            }
+            
             if (isConfirmed) {
-                fetch(`http://localhost:3000/api/chocolate/${envioClienteId}`, {
+                fetch(`http://localhost:3000/api/cliente/${chocoId}`, {
                     method: 'DELETE'
                 })
                 .then(response => {
                     if (response.ok) {
-                        alert('Chocolate borrado con éxito');
-                        location.reload();
+                        alert('Envio de cliente borrado con éxito');
+                        // Opcional: Recargar la página o actualizar la tabla
+                        location.reload(); // Recarga la página para reflejar los cambios
                     } else {
                         alert('Error al borrar el chocolate');
                     }
+                    deleteButton.classList.remove('loading');
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Error al borrar el chocolate');
+                    deleteButton.classList.remove('loading');
                 });
             }
         }

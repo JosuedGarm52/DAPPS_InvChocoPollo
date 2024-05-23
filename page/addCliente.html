@@ -22,13 +22,19 @@
                 <label for="direccion">Direccion:</label>
                 <input type="text" id="direccion" name="direccion" required>
             </div>
-            <button type="submit" class="button">Añadir Envio a Cliente</button>
+            <button type="submit" class="button" id="add">Añadir Envio a Cliente</button>
         </form>
         <a href="envCliente-inventory" class="button">Regresar</a>
     </div>
     <script>
         document.getElementById('clienteForm').addEventListener('submit', async function(event) {
             event.preventDefault();
+            const addClienteButton = document.querySelector('#add');
+            if (addClienteButton) {
+                addClienteButton.classList.add('loading');
+            } else {
+                console.error('Button element with ID "add" not found.');
+            }
 
             const tienda = document.getElementById('tienda').value;
             const encargado = document.getElementById('encargado').value;
@@ -37,8 +43,8 @@
             //const cantidadExistencia = document.getElementById('cantidadExistencia').value;
 
             const dataToSend = {
-                tienda: tienda,
-                encargado: encargado,
+                Tienda: tienda,
+                Encargado: encargado,
                 direccion: direccion,
                 //cantidadExistencia: parseInt(cantidadExistencia)
             };
@@ -59,7 +65,9 @@
                     const data = await response.json();
                     console.log('Envio añadido:', data);
                     alert('Envio añadido con éxito');
+                    window.location.href = "envCliente-inventory";
                 } else {
+                    addClienteButton.classList.remove('loading');
                     const errorMessage = await response.text();
                     console.error('Error:', errorMessage);
                     alert('Error al añadir el envio');
@@ -67,6 +75,7 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error al añadir el envio');
+                addClienteButton.classList.remove('loading');
             }
         });
     </script>
