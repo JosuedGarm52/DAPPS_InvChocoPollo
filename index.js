@@ -59,6 +59,9 @@ app.get('/addCliente', (req, res) => {
 app.get('/putChocolate', (req, res) => {
     res.sendFile(path.join(__dirname, 'page/putChocolate.html'));
 });
+app.get('/putPollo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'page/putPollo.html'));
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT,()=>console.log('server running on port '+ PORT))

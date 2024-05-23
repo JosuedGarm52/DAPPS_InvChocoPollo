@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Pollo</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-image: url('pollos1.jpg'); /* Reemplazar con la ruta de la imagen */
+            background-size: cover; /* Cubrir toda la página con la imagen */
+            background-position: center; /* Centrar la imagen en la página */
+            background-repeat: no-repeat; /* No repetir la imagen */
+            background-attachment: fixed; /* Imagen fija al desplazarse */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: black; /* Color de texto más oscuro */
+        }
+    </style>
+    <link rel="stylesheet" href="diseñoGeneral.css">
+</head>
+<body>
+    <div class="contenedor-chocolate">
+        <h1 class="title">Añadir Pollo</h1>
+        <form id="polloForm">
+            <label for="color">Color:</label>
+            <input type="text" id="color" name="color"><br><br>
+            
+            <label for="size">Size:</label>
+            <input type="text" id="size" name="size"><br><br>
+            
+            <label for="sexo">Sexo:</label>
+            <input type="text" id="sexo" name="sexo"><br><br>
+            
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio"><br><br>
+            
+            <button type="submit" class="button" id = "add">Editar Pollo</button>
+        </form>
+        <a href="pollo-inventory" class="button">Regresar</a>
+    </div>
+    <script>
+        function getQueryParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const regex = /([^&=]+)=([^&]*)/g;
+            let match;
+            while ((match = regex.exec(queryString))) {
+                params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
+            }
+            return params;
+        }
+        var PolloId;
+        async function populateDetails() {
+            const params = getQueryParams();
+            PolloId = params.PolloId;
+            if (!PolloId) {
+                alert('No pollo ID provided');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/pollo/${PolloId}`);
+                if (!response.ok) {
+                    throw new Error('Error fetching chocolate details: ' + response.statusText);
+                }
+                const pollo = await response.json();
+
+                console.log('pollo data:', pollo); // Check data here
+
+                document.getElementById('color').value = pollo.color;
+                document.getElementById('size').value = pollo.size;
+                document.getElementById('sexo').value = pollo.sexo;
+                document.getElementById('precio').value = pollo.precio;
+                
+            } catch (error) {
+                console.error('Error fetching pollo details:', error);
+            }
+        }
+        document.getElementById('polloForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const addPolloButton = document.querySelector('#add');
+            if (addPolloButton) {
+                addPolloButton.classList.add('loading');
+            } else {
+                console.error('Button element with ID "add" not found.');
+            }
+            const color = document.getElementById('color').value;
+            const size = document.getElementById('size').value;
+            const sexo = document.getElementById('sexo').value;
+            const precio = document.getElementById('precio').value;
+            //const cantidadExistencia = document.getElementById('cantidadExistencia').value;
+
+            const dataToSend = {
+                color: color,
+                size: size,
+                sexo: sexo,
+                precio: parseInt(precio),
+                //cantidadExistencia: parseInt(cantidadExistencia)
+            };
+
+            const jsonData = JSON.stringify(dataToSend);
+            console.log("json " + jsonData);
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/pollo/${PolloId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonData 
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Pollo añadido:', data);
+                    alert('Pollo añadido con éxito');
+                    window.location.href = "pollo-inventory";
+                } else {
+                    addPolloButton.classList.remove('loading');
+                    const errorMessage = await response.text();
+                    console.error('Error:', errorMessage);
+                    alert('Error al añadir el pollo');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al añadir el pollo');
+                addPolloButton.classList.remove('loading');
+            }
+        });
+        document.addEventListener('DOMContentLoaded', populateDetails);
+    </script>
+</body>
+</html>

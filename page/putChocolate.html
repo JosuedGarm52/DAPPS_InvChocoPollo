@@ -130,10 +130,12 @@
                     const errorMessage = await response.text(); // Captura el mensaje de error
                     console.error('Error:', errorMessage);
                     alert('Error al añadir el chocolate');
+                    addPolloButton.classList.remove('loading');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error al añadir el chocolate');
+                addPolloButton.classList.remove('loading');
             }
         });
         document.addEventListener('DOMContentLoaded', populateDetails);
