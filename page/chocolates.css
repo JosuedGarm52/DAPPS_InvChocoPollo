@@ -94,3 +94,6 @@ button:hover {
     background-color: red; /* Change to red during loading */
     /* ... other styles for loading state ... */
 }
+#add{
+    background-color: green;
+}
