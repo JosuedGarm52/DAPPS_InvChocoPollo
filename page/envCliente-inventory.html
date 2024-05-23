@@ -72,7 +72,7 @@
                 borrarButton.id = `borrar-${envio.envioClienteId}`;
                 borrarButton.textContent = 'Borrar';
                 borrarButton.classList.add('button');
-                borrarButton.onclick = () => borrarChocolate(envio.envioClienteId);
+                borrarButton.onclick = () => borrarCliente(envio.envioClienteId);
                 accionesCell.appendChild(borrarButton);
 
                 row.appendChild(accionesCell);
@@ -89,7 +89,7 @@
         }
 
         function borrarCliente(envioClienteId) {
-            const isConfirmed = window.confirm(`¿Estás seguro de que quieres borrar el chocolate con ID: ${chocoId}?`);
+            const isConfirmed = window.confirm(`¿Estás seguro de que quieres borrar el chocolate con ID: ${envioClienteId}?`);
             const deleteButton = document.querySelector(`#borrar-${envioClienteId}`);
             if (deleteButton) {
                 deleteButton.classList.add('loading');
@@ -98,7 +98,7 @@
             }
             
             if (isConfirmed) {
-                fetch(`http://localhost:3000/api/cliente/${chocoId}`, {
+                fetch(`http://localhost:3000/api/cliente/${envioClienteId}`, {
                     method: 'DELETE'
                 })
                 .then(response => {
