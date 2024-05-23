@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Envio a Cliente</title>
+    <link rel="stylesheet" href="addCliente.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Añadir Envio a Cliente</h1>
+        <form id="clienteForm">
+            <div class="form-group">
+                <label for="tienda">Nombre de la tienda:</label>
+                <input type="text" id="tienda" name="tienda" required>
+            </div>
+            <div class="form-group">
+                <label for="encargado">Nombre del encargado:</label>
+                <input type="text" id="encargado" name="encargado" required>
+            </div>
+            <div class="form-group">
+                <label for="direccion">Direccion:</label>
+                <input type="text" id="direccion" name="direccion" required>
+            </div>
+            <button type="submit" class="button">Añadir Envio a Cliente</button>
+        </form>
+        <a href="envCliente-inventory" class="button">Regresar</a>
+    </div>
+    <script>
+        document.getElementById('clienteForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const tienda = document.getElementById('tienda').value;
+            const encargado = document.getElementById('encargado').value;
+            const direccion = document.getElementById('direccion').value;
+            //const precio = document.getElementById('precio').value;
+            //const cantidadExistencia = document.getElementById('cantidadExistencia').value;
+
+            const dataToSend = {
+                tienda: tienda,
+                encargado: encargado,
+                direccion: direccion,
+                //cantidadExistencia: parseInt(cantidadExistencia)
+            };
+
+            const jsonData = JSON.stringify(dataToSend);
+            console.log("json " + jsonData);
+
+            try {
+                const response = await fetch('http://localhost:3000/api/cliente/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonData 
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Envio añadido:', data);
+                    alert('Envio añadido con éxito');
+                } else {
+                    const errorMessage = await response.text();
+                    console.error('Error:', errorMessage);
+                    alert('Error al añadir el envio');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al añadir el envio');
+            }
+        });
+    </script>
+</body>
+</html>

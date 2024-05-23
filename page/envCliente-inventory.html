@@ -3,12 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Envio Cliente</title>
-    <link rel="stylesheet" href="botones.css">
+    <title>Envios a Clientes</title>
+    <link rel="stylesheet" href="cliente.css">
 </head>
 <body>
-    <a href="Home" class="button">Home</a>
-    <a href="chocolate-inventory" class="button">Chocolate</a>
-    <a href="pollo-inventory" class="button">Pollo</a>
+    <div class="container">
+        <h1 class="title">Lista de Envios a Clientes</h1>
+        <table id="enviosTable" border="1">
+            <thead>
+                <tr>
+                    <th>Nombre de la Tienda</th>
+                    <th>Nombre del Encargado</th>
+                    <th>Direccion</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas se llenarán con JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="buttons">
+            <a href="addCliente" class="button">Añadir Envio a Cliente</a>
+            <a href="Home" class="button">Home</a>
+            <a href="pollo-inventory" class="button">Pollo</a>
+            <a href="chocolate-inventory" class="button">Chocolates</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <script>
+        // JavaScript code for populating the table and handling actions
+        async function getEnvios() {
+            const response = await fetch('http://localhost:3000/api/clientes/');
+            const envios = await response.json();
+            return envios;
+        }
+
+        async function populateTable() {
+            const envios = await getEnvios();
+            const tableBody = document.getElementById('enviosTable').getElementsByTagName('tbody')[0];
+
+            envios.forEach(envio => {
+                const row = document.createElement('tr');
+
+                // Nombre de la tienda
+                const tiendaCell = document.createElement('td');
+                tiendaCell.textContent = envio.Tienda;
+                row.appendChild(tiendaCell);
+
+                // Nombre del encargado
+                const encargadoCell = document.createElement('td');
+                encargadoCell.textContent = envio.Encargado;
+                row.appendChild(encargadoCell);
+
+                // dirección
+                const direccionCell = document.createElement('td');
+                direccionCell.textContent = envio.direccion;
+                row.appendChild(direccionCell);
+
+                // Acciones
+                const accionesCell = document.createElement('td');
+
+                // Botón Ver
+                const verButton = document.createElement('button');
+                verButton.textContent = 'Ver';
+                verButton.onclick = () => verCliente(envio.envioClienteId);
+                accionesCell.appendChild(verButton);
+
+                // Botón Editar
+                const editarButton = document.createElement('button');
+                editarButton.textContent = 'Editar';
+                editarButton.onclick = () => editarCliente(envio.envioClienteId);
+                accionesCell.appendChild(editarButton);
+
+                // Botón Borrar
+                const borrarButton = document.createElement('button');
+                borrarButton.textContent = 'Borrar';
+                borrarButton.onclick = () => borrarCliente(envio.envioClienteId);
+                accionesCell.appendChild(borrarButton);
+
+                row.appendChild(accionesCell);
+                tableBody.appendChild(row);
+            });
+        }
+
+        function verCliente(envioClienteId) {
+            window.location.href = `/detalleChocolate?chocoId=${envioClienteId}`;
+        }
+
+        function editarCliente(envioClienteId) {
+            alert(`Editar chocolate con ID: ${envioClienteId}`);
+        }
+
+        function borrarCliente(envioClienteId) {
+            const isConfirmed = window.confirm(`¿Estás seguro de que quieres borrar el chocolate con ID: ${chocoId}?`);
+            if (isConfirmed) {
+                fetch(`http://localhost:3000/api/chocolate/${envioClienteId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Chocolate borrado con éxito');
+                        location.reload();
+                    } else {
+                        alert('Error al borrar el chocolate');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al borrar el chocolate');
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', populateTable);
+    </script>
 </body>
 </html>

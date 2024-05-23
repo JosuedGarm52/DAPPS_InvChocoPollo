@@ -4,31 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chocolates</title>
-    <link rel="stylesheet" href="botones.css">
+    <link rel="stylesheet" href="chocolates.css">
 </head>
 <body>
-    <h1>Lista de Chocolates</h1>
-    <table id="chocolatesTable" border="1">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Tipo</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>Cantidad en Existencia</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Las filas se llenarán con JavaScript -->
-        </tbody>
-    </table>
+    <div class="container">
+        <h1 class="title">Lista de Chocolates</h1>
+        <table id="chocolatesTable" border="1">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Cantidad en Existencia</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas se llenarán con JavaScript -->
+            </tbody>
+        </table>
 
-    <a href="addChocolate" class="button">Añadir Chocolate</a>
-    <a href="Home" class="button">Home</a>
-    <a href="pollo-inventory" class="button">Pollo</a>
-    <a href="envCliente-inventory" class="button">Envio de clientes</a>
-
+        <div class="buttons">
+            <a href="addChocolate" class="button">Añadir Chocolate</a>
+            <a href="Home" class="button">Home</a>
+            <a href="pollo-inventory" class="button">Pollo</a>
+            <a href="envCliente-inventory" class="button">Envio de clientes</a>
+        </div>
+    </div>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     <script>
         async function getChocolates() {
@@ -87,7 +90,9 @@
 
                 // Botón Borrar
                 const borrarButton = document.createElement('button');
+                borrarButton.id = `borrar-${choco.chocoId}`;
                 borrarButton.textContent = 'Borrar';
+                borrarButton.classList.add('button');
                 borrarButton.onclick = () => borrarChocolate(choco.chocoId);
                 accionesCell.appendChild(borrarButton);
 
@@ -107,6 +112,13 @@
 
         function borrarChocolate(chocoId) {
             const isConfirmed = window.confirm(`¿Estás seguro de que quieres borrar el chocolate con ID: ${chocoId}?`);
+            const deleteButton = document.querySelector(`#borrar-${chocoId}`);
+            if (deleteButton) {
+                deleteButton.classList.add('loading');
+            } else {
+                console.error('Button element with ID "add" not found.');
+            }
+            
             if (isConfirmed) {
                 fetch(`http://localhost:3000/api/chocolate/${chocoId}`, {
                     method: 'DELETE'

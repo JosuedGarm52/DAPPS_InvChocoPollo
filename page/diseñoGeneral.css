@@ -1,0 +1,54 @@
+
+  /* Encabezado */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgb(5, 247, 5); /* Color de texto más oscuro */
+}
+
+  /* Contenedor principal */
+.contenedor-chocolate {
+    width: 50%; /* Ancho del contenedor */
+    margin: 20px auto; /* Centrar el contenedor */
+    padding: 20px;
+    background-color: #fff; /* Fondo blanco */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    
+    /* Margen interno para separar del borde */
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+  /* Etiquetas de información */
+.etiqueta {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+
+  /* Valores de información */
+.valor {
+    margin-left: 10px;
+}
+    /* Botón de regreso */
+.button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Verde */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #3e8e41; /* Verde más oscuro */
+    
+}
+.button.loading {
+  background-color: red; /* Change to red during loading */
+  /* ... other styles for loading state ... */
+}

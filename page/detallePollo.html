@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Pollo</title>
+    <link rel="stylesheet" href="botones.css">
+</head>
+<body>
+    <h1>Detalles del Chocolate</h1>
+    <div>
+        <p><strong>Color:</strong> <span id="color"></span></p>
+        <p><strong>Size:</strong> <span id="size"></span></p>
+        <p><strong>Sexo:</strong> <span id="sexo"></span></p>
+        <p><strong>Precio:</strong> <span id="precio"></span></p>
+    </div>
+
+    <a href="pollo-inventory" class="button">Regresar</a>
+
+    <script>
+        function getQueryParams() {
+        const params = {};
+        const queryString = window.location.search.substring(1);
+        const regex = /([^&=]+)=([^&]*)/g;
+        let match;
+        while ((match = regex.exec(queryString))) {
+            params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
+        }
+        return params;
+    }
+
+    async function populateDetails() {
+        const params = getQueryParams();
+        const polloId = params.polloId;
+        if (!polloId) {
+            alert('No Pollo ID provided');
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/pollo/${polloId}`);
+            const pollo = await response.json();
+
+            document.getElementById('color').textContent = pollo.nombre;
+            document.getElementById('size').textContent = pollo.tipo;
+            document.getElementById('sexo').textContent = pollo.descripcion;
+            document.getElementById('precio').textContent = pollo.precio;
+        } catch (error) {
+            console.error('Error fetching pollo details:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', populateDetails);
+    </script>
+</body>
+</html>

@@ -44,5 +44,13 @@ app.get('/addChocolate', (req, res) => {
     res.sendFile(path.join(__dirname, 'page/addChocolate.html'));
 });
 
+app.get('/addPollo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'page/addPollo.html'));
+});
+
+app.get('/addCliente', (req, res) => {
+    res.sendFile(path.join(__dirname, 'page/addCliente.html'));
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT,()=>console.log('server running on port '+ PORT))

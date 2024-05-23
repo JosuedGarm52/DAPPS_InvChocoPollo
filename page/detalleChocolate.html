@@ -4,55 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles del Chocolate</title>
-    <link rel="stylesheet" href="botones.css">
+    <link rel="stylesheet" href="diseñoDetalle.css">
 </head>
 <body>
     <h1>Detalles del Chocolate</h1>
-    <div>
+    <br>
+    <div class="contenedor-chocolate">
         <p><strong>Nombre:</strong> <span id="nombre"></span></p>
         <p><strong>Tipo:</strong> <span id="tipo"></span></p>
         <p><strong>Descripción:</strong> <span id="descripcion"></span></p>
         <p><strong>Precio:</strong> <span id="precio"></span></p>
         <p><strong>Cantidad en Existencia:</strong> <span id="cantidadExistencia"></span></p>
+        <a href="chocolate-inventory" class="button">Regresar</a>
     </div>
-
-    <a href="chocolate-inventory" class="button">Regresar</a>
 
     <script>
         function getQueryParams() {
-    const params = {};
-    const queryString = window.location.search.substring(1);
-    const regex = /([^&=]+)=([^&]*)/g;
-    let match;
-    while ((match = regex.exec(queryString))) {
-        params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
-    }
-    return params;
-}
-
-async function populateDetails() {
-    const params = getQueryParams();
-    const chocoId = params.chocoId;
-    if (!chocoId) {
-        alert('No chocolate ID provided');
-        return;
-    }
-
-    try {
-        const response = await fetch(`http://localhost:3000/api/chocolate/${chocoId}`);
-        const chocolate = await response.json();
-
-        document.getElementById('nombre').textContent = chocolate.nombre;
-        document.getElementById('tipo').textContent = chocolate.tipo;
-        document.getElementById('descripcion').textContent = chocolate.descripcion;
-        document.getElementById('precio').textContent = chocolate.precio;
-        document.getElementById('cantidadExistencia').textContent = chocolate.cantidadExistencia;
-        } catch (error) {
-            console.error('Error fetching chocolate details:', error);
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const regex = /([^&=]+)=([^&]*)/g;
+            let match;
+            while ((match = regex.exec(queryString))) {
+                params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
+            }
+            return params;
         }
-    }
 
-    document.addEventListener('DOMContentLoaded', populateDetails);
+        async function populateDetails() {
+            const params = getQueryParams();
+            const chocoId = params.chocoId;
+            if (!chocoId) {
+                alert('No chocolate ID provided');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/chocolate/${chocoId}`);
+                const chocolate = await response.json();
+
+                document.getElementById('nombre').textContent = chocolate.nombre;
+                document.getElementById('tipo').textContent = chocolate.tipo;
+                document.getElementById('descripcion').textContent = chocolate.descripcion;
+                document.getElementById('precio').textContent = chocolate.precio;
+                document.getElementById('cantidadExistencia').textContent = chocolate.cantidadExistencia;
+                } catch (error) {
+                    console.error('Error fetching chocolate details:', error);
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', populateDetails);
     </script>
 </body>
 </html>

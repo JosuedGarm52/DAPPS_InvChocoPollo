@@ -4,11 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pollos</title>
-    <link rel="stylesheet" href="botones.css">
+    <link rel="stylesheet" href="pollos.css">
 </head>
 <body>
-    <a href="Home" class="button">Home</a>
-    <a href="chocolate-inventory" class="button">Chocolate</a>
-    <a href="envCliente-inventory" class="button">Envio de clientes</a>
+    <div class="container">
+        <h1 class="title">Lista de Pollos</h1>
+        <table id="pollosTable" border="1">
+            <thead>
+                <tr>
+                    <th>Color</th>
+                    <th>Tamaño</th>
+                    <th>Sexo</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las filas se llenarán con JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="buttons">
+            <a href="addPollo" class="button">Añadir Pollo</a>
+            <a href="Home" class="button">Home</a>
+            <a href="chocolate-inventory" class="button">Chocolate</a>
+            <a href="envCliente-inventory" class="button">Envio de clientes</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <script>
+        async function getPollos() {
+            const response = await fetch('http://localhost:3000/api/pollos/');
+            const pollos = await response.json();
+            return pollos;
+        }
+
+        async function populateTable() {
+            const pollos = await getPollos();
+            const tableBody = document.getElementById('pollosTable').getElementsByTagName('tbody')[0];
+
+            pollos.forEach(pollo => {
+                const row = document.createElement('tr');
+
+                // Nombre
+                /*const nombreCell = document.createElement('td');
+                nombreCell.textContent = pollo.nombre;
+                row.appendChild(nombreCell);*/
+
+                // Color
+                const colorCell = document.createElement('td');
+                colorCell.textContent = pollo.color;
+                row.appendChild(colorCell);
+
+                // Tamaño
+                const sizeCell = document.createElement('td');
+                sizeCell.textContent = pollo.size;
+                row.appendChild(sizeCell);
+
+                // Sexo
+                const sexoCell = document.createElement('td');
+                sexoCell.textContent = pollo.sexo;
+                row.appendChild(sexoCell);
+
+                // Precio
+                const precioCell = document.createElement('td');
+                precioCell.textContent = pollo.precio;
+                row.appendChild(precioCell);
+
+                // Acciones
+                const accionesCell = document.createElement('td');
+
+                // Botón Ver
+                const verButton = document.createElement('button');
+                verButton.textContent = 'Ver';
+                verButton.onclick = () => verPollo(pollo.polloId);
+                accionesCell.appendChild(verButton);
+
+                // Botón Editar
+                const editarButton = document.createElement('button');
+                editarButton.textContent = 'Editar';
+                editarButton.onclick = () => editarPollo(pollo.polloId);
+                accionesCell.appendChild(editarButton);
+
+                // Botón Borrar
+                const borrarButton = document.createElement('button');
+                borrarButton.textContent = 'Borrar';
+                borrarButton.onclick = () => borrarPollo(pollo.polloId);
+                accionesCell.appendChild(borrarButton);
+
+                row.appendChild(accionesCell);
+                tableBody.appendChild(row);
+            });
+        }
+
+        function verPollo(polloId) {
+            window.location.href = `/detallePollo?polloId=${polloId}`;
+        }
+
+        function editarPollo(polloId) {
+            alert(`Editar pollo con ID: ${polloId}`);
+        }
+
+        function borrarPollo(polloId) {
+            const isConfirmed = window.confirm(`¿Estás seguro de que quieres borrar el pollo con ID: ${polloId}?`);
+            if (isConfirmed) {
+                fetch(`http://localhost:3000/api/pollo/${polloId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Pollo borrado con éxito');
+                        location.reload();
+                    } else {
+                        alert('Error al borrar el pollo');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al borrar el pollo');
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', populateTable);
+    </script>
 </body>
 </html>

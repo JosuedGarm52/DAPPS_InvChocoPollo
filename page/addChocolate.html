@@ -4,41 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADD Chocolate</title>
-    <link rel="stylesheet" href="botones.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-image: url('chocolates.png'); /* Reemplazar con la ruta de la imagen */
+            background-size: cover; /* Cubrir toda la página con la imagen */
+            background-position: center; /* Centrar la imagen en la página */
+            background-repeat: no-repeat; /* No repetir la imagen */
+            background-attachment: fixed; /* Imagen fija al desplazarse */
+        }
+    </style>
+    <link rel="stylesheet" href="diseñoGeneral.css">
 </head>
 <body>
-    <h1>Añadir Chocolate</h1>
-    <form id="chocolateForm">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre"><br><br>
-        
-        <label for="tipo">Tipo:</label>
-        <input type="text" id="tipo" name="tipo"><br><br>
-        
-        <label for="descripcion">Descripción:</label>
-        <input type="text" id="descripcion" name="descripcion"><br><br>
-        
-        <label for="precio">Precio:</label>
-        <input type="number" id="precio" name="precio"><br><br>
-        
-        <label for="cantidadExistencia">Cantidad en Existencia:</label>
-        <input type="number" id="cantidadExistencia" name="cantidadExistencia"><br><br>
-        
-        <button type="submit">Añadir Chocolate</button>
-    </form>
-    <a href="chocolate-inventory" class="button">Regresar</a>
+    <div class="contenedor-chocolate">
+        <h1>Añadir Chocolate</h1>
+        <form id="chocolateForm">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre"><br><br>
+            
+            <label for="tipo">Tipo:</label>
+            <input type="text" id="tipo" name="tipo"><br><br>
+            
+            <label for="descripcion">Descripción:</label>
+            <input type="text" id="descripcion" name="descripcion"><br><br>
+            
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio"><br><br>
+            
+            <label for="cantidadExistencia">Cantidad en Existencia:</label>
+            <input type="number" id="cantidadExistencia" name="cantidadExistencia"><br><br>
+            
+            <button type="submit" class="button" id="add">Añadir Chocolate</button>
+        </form>
+        <a href="chocolate-inventory" class="button">Regresar</a>
+    </div>
+    
     <script>
         document.getElementById('chocolateForm').addEventListener('submit', async function(event) {
             event.preventDefault(); // Evita que el formulario se envíe normalmente
+            const addChocolateButton = document.querySelector('#add');
             /*
             const formData = new FormData(this); // Recopila los datos del formulario
             const jsonData = {};
             formData.forEach((value, key) => {
                 jsonData[key] = value;
             });
-
+            
             console.log('JSON a enviar:', jsonData); // Imprime el JSON que se enviará
             */
+            if (addChocolateButton) {
+                addChocolateButton.classList.add('loading');
+            } else {
+                console.error('Button element with ID "add" not found.');
+            }
             // Obtener los valores de los campos del formulario
             const nombre = document.getElementById('nombre').value;
             const tipo = document.getElementById('tipo').value;
@@ -72,7 +92,9 @@
                     const data = await response.json(); // Espera la respuesta del servidor
                     console.log('Chocolate añadido:', "data");
                     alert('Chocolate añadido con éxito');
+                    window.location.href = "chocolate-inventory";
                 } else {
+                    addChocolateButton.classList.remove('loading');
                     const errorMessage = await response.text(); // Captura el mensaje de error
                     console.error('Error:', errorMessage);
                     alert('Error al añadir el chocolate');
